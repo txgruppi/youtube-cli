@@ -3,15 +3,16 @@
 #include <string.h>
 #include "Chrome.h"
 
-ChromeTab *getFirstYoutubeWindow(ChromeApplication *app) {
+NSMutableArray *getYoutubeWindows(ChromeApplication *app) {
+  NSMutableArray *result = [[NSMutableArray alloc] initWithCapacity:1];
   for (ChromeWindow *window in [[app windows] get]) {
     for (ChromeTab *tab in [[window tabs] get]) {
       if ([[tab URL] hasPrefix:@"http://www.youtube.com/"] || [[tab URL] hasPrefix:@"https://www.youtube.com/"]) {
-        return tab;
+        [result addObject:tab];
       }
     }
   }
-  return nil;
+  return result;
 }
 
 void executePlayPause(ChromeTab *tab) {
@@ -28,16 +29,20 @@ int main(int argc, char *argv[]) {
 
   int cmdFound = 0;
 
-  ChromeTab *tab = getFirstYoutubeWindow(app);
+  NSMutableArray *windows = getYoutubeWindows(app);
+  int count = [windows count];
+  int i;
 
-  if (tab == nil) {
+  if (count == 0) {
     printf("Can't find Youtube tab\n");
     return 1;
   }
 
   if (argc == 2) {
     if (strcmp(argv[1], "play") == 0 || strcmp(argv[1], "pause") == 0 || strcmp(argv[1], "playpause") == 0 || strcmp(argv[1], "pp") == 0) {
-      executePlayPause(tab);
+      for (i = 0; i < count; i++) {
+        executePlayPause(windows[i]);
+      }
       cmdFound = 1;
     }
   }
