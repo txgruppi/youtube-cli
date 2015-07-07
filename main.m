@@ -19,9 +19,19 @@ void executePlayPause(ChromeTab *tab) {
   [tab executeJavascript:@"(function(){ var v = document.getElementsByTagName('video')[0]; if (v) { v[v.paused?'play':'pause']();  } else { v = document.getElementById('movie_player'); v[v.getPlayerState()===1?'pauseVideo':'playVideo']();  } })();"];
 }
 
+void executeNext(ChromeTab *tab) {
+  [tab executeJavascript:@"(function(){ var e = document.querySelector('.ytp-button-next'); if (e) e.click(); })();"];
+}
+
+void executePrevious(ChromeTab *tab) {
+  [tab executeJavascript:@"(function(){ var e = document.querySelector('.ytp-button-prev'); if (e) e.click(); })();"];
+}
+
 void usage(char *cmd) {
   printf("Usage: %s <command>\n\n  Commands:\n", cmd);
   printf("    %-28s\n      %s\n", "play|pause|playpause|pp",    "Toggle the playing/paused state of the current track");
+  printf("    %-28s\n      %s\n", "next|n",                     "Go to the next song on the playlist");
+  printf("    %-28s\n      %s\n", "previous|prev|p",            "Go to the previous song on the playlist");
 }
 
 int main(int argc, char *argv[]) {
@@ -42,6 +52,16 @@ int main(int argc, char *argv[]) {
     if (strcmp(argv[1], "play") == 0 || strcmp(argv[1], "pause") == 0 || strcmp(argv[1], "playpause") == 0 || strcmp(argv[1], "pp") == 0) {
       for (i = 0; i < count; i++) {
         executePlayPause(windows[i]);
+      }
+      cmdFound = 1;
+    } else if (strcmp(argv[1], "next") == 0 || strcmp(argv[1], "n") == 0) {
+      for (i = 0; i < count; i++) {
+        executeNext(windows[i]);
+      }
+      cmdFound = 1;
+    } else if (strcmp(argv[1], "previous") == 0|| strcmp(argv[1], "prev") == 0 || strcmp(argv[1], "p") == 0) {
+      for (i = 0; i < count; i++) {
+        executePrevious(windows[i]);
       }
       cmdFound = 1;
     }
