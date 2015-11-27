@@ -16,15 +16,15 @@ NSMutableArray *getYoutubeWindows(ChromeApplication *app) {
 }
 
 void executePlayPause(ChromeTab *tab) {
-  [tab executeJavascript:@"(function(){ var v = document.getElementsByTagName('video')[0]; if (v) { v[v.paused?'play':'pause']();  } else { v = document.getElementById('movie_player'); v[v.getPlayerState()===1?'pauseVideo':'playVideo']();  } })();"];
+  [tab executeJavascript:@"(function(){ var e = document.querySelector('.ytp-play-button'); if (e) e.click(); })();"];
 }
 
 void executeNext(ChromeTab *tab) {
-  [tab executeJavascript:@"(function(){ var e = document.querySelector('.ytp-button-next'); if (e) e.click(); })();"];
+  [tab executeJavascript:@"(function(){ var e = document.querySelector('.ytp-next-button'); if (e) e.click(); })();"];
 }
 
 void executePrevious(ChromeTab *tab) {
-  [tab executeJavascript:@"(function(){ var e = document.querySelector('.ytp-button-prev'); if (e) e.click(); })();"];
+  [tab executeJavascript:@"(function(){ var e = document.querySelector('.ytp-prev-button'); if (e) e.click(); })();"];
 }
 
 void usage(char *cmd) {
